@@ -28,4 +28,4 @@ def quantityFormat(value):
 ##### FORMAT DATE #####
 @app.template_filter()
 def dateFormat(value):
-    return value.strftime("%Y-%m-%d")]]]]][[[[[[[[[[[[]]]]]]]]]]]]
+    return value.strftime("%Y-%m-%d")
