@@ -23,8 +23,8 @@ def crypto_class():
     user_id = session['user_id']
     if request.method == 'POST':
         crypto_class_name = request.form.get("crypto_class_name")
-        allocation_percent = request.form.get("allocation_percent")
-        insert_crypto_class(crypto_class_name, allocation_percent)
+        crypto_percent = request.form.get("crypto_percent")
+        insert_crypto_class(crypto_class_name, crypto_percent)
         return redirect(url_for('crypto_class'))
     crypto_classes = get_crypto_class()
     return render_template('crypto_class.html', form=form, crypto_classes=crypto_classes)
@@ -35,8 +35,8 @@ def crypto_class_update(crypto_class_id):
     form = CryptoClassForm()
     if request.method == 'POST':
         crypto_class_name = form.crypto_class_name.data
-        allocation_percent = form.allocation_percent.data
-        update_crypto_class(crypto_class_name, allocation_percent, crypto_class_id)
+        crypto_percent = form.crypto_percent.data
+        update_crypto_class(crypto_class_name, crypto_percent, crypto_class_id)
         return redirect(url_for('crypto_class'))
     return render_template('crypto_class.html', form=form)
 
