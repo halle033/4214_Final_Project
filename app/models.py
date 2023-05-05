@@ -16,15 +16,15 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return (self.id)
 
-class Asset_Class(db.Model):
-    asset_class_id = db.Column(db.Integer, primary_key=True)
-    asset_class_name = db.Column(db.String(164), index=True, unique=True)
-    allocation_percent = db.Column(db.Float)
+class Crypto_Class(db.Model):
+    crypto_class_id = db.Column(db.Integer, primary_key=True)
+    crypto_class_name = db.Column(db.String(164), index=True, unique=True)
+    crypto_percent = db.Column(db.Float)
 
-class Ticker(db.Model):
-    ticker_id = db.Column(db.Integer, primary_key=True)
-    ticker_symbol = db.Column(db.String(64), index=True, unique=True)
-    company_name = db.Column(db.String(164), index=True)
-    current_price = db.Column(db.Float)
-    user_id = db.Column(db.Integer)
-    asset_class_id = db.Column(db.Integer)
+class Crypto(db.Model):
+    crypto_class_id = db.Column(db.Integer, primary_key=True)
+    crypto_symbol = db.Column(db.String(64), index=True, unique=True)
+    comp_name = db.Column(db.String(164), index=True)
+    crypto_price = db.Column(db.Float)
+    user_id_ = db.Column(db.Integer)
+    crypto_id_ = db.Column(db.Integer)

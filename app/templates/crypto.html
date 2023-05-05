@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Crypto- Group 1</title>
+{% endblock %}
+
+
+{% block body %}
+    <!-- Header-->
+          <!-- Header-->
+       <header class="py-4">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">Crypto Management</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+<section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul>
+                        {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% endwith %}
+
+
+                        <br>
+
+                        <h1>Cryptos
+                            <button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_crypto">Add Crypto</button>
+                            <a role="button" class="btn btn-warning" aria-disabled="true" href="{{ url_for('crypto_price_update') }}">Update Crypto Price</a>
+                        </h1>
+
+                            <div class="modal fade" id="add_crypto" aria-labelledby="add_account_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Transaction Type</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('crypto') }}" method="POST" novalidate>
+                                                <div class="modal-body">
+                                                        {{ form.hidden_tag() }}
+                                                    <p>
+                                                        {{ form.crypto_symbol.label }}<br>
+                                                        {{ form.crypto_symbol(size=32) }}
+                                                        {% for error in form.crypto_symbol.errors %}
+                                                        <span style="color: red;">[{{ error }}] </span>
+                                                        {% endfor %}
+                                                    </p>
+                                                    <p>
+                                                        {{ form.company_name.label }}<br>
+                                                        {{ form.company_name(size=52) }}
+                                                        {% for error in form.company_name.errors %}
+                                                        <span style="color: red;">[{{ error }}] </span>
+                                                        {% endfor %}
+                                                    </p>
+                                                     <p>
+                                                        {{ form.crypto_class.label }}<br>
+                                                        {{ form.crypto_class }}
+                                                        {% for error in form.crypto_class.errors %}
+                                                        <span style="color: red;">[{{ error }}] </span>
+                                                        {% endfor %}
+                                                    </p>
+                                                    <p> {{ form.submit(class="btn btn-success") }} </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                        </div>
+
+                            <table  class="table">
+                          <thead>
+                            <th scope="col">Crypto Symbols</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Current Price</th>
+                            <th scope="col">Crypto Class</th>
+                          </thead>
+                            {% for crypto in cryptos %}
+                          <tr>
+                            <td align="left">{{ crypto.crypto_symbol }}</td>
+                            <td align="left">{{ crypto.company_name }}</td>
+                              <td align="left">{{ crypto.current_price | currencyFormat }}</td>
+                              <td align="left">{{ crypto.crypto_class_name }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update_modal{{crypto.crypto}}">Update Info</button>
+                                <div class="modal fade" id="update_modal{{crypto.crypto_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Cryptos</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                               <form action="{{url_for('crypto_update', crypto_id=crypto.crypto_id)}}" method="POST" novalidate>
+                                                <div class="modal-body">
+
+                                                    <p>
+                                                        <label for="crypto_symbol">Crypto Symbol:</label><br>
+                                                        <input type="text" id="crypto_symbol" name="crypto_symbol" value="{{ crypto.crypto_symbol  }}">
+
+                                                    </p>
+                                                    <p>
+                                                        <label for="company_name">Company Name:</label><br>
+                                                        <input type="text" id="company_name" name="company_name" size=50 value="{{ crypto.company_name  }}">
+
+                                                    </p>
+                                                    <p>
+                                                        <label for="crypto_class">Crypto Class:</label><br>
+                                                    <select id="crypto_class" name="crypto_class">
+                                                      <option value="{{ crypto.crypto_class_id }}" selected>{{ crypto.crypto_class_name }}</option>
+                                                      {% for crypto_class in crypto_classes %}
+                                                      <option value="{{ crypto_class.crypto_class_id }}">{{ crypto_class.crypto_class_name }}</option>
+                                                      {% endfor %}
+                                                    </select>
+
+                                                    </p>
+                                                    <p>
+
+
+                                                    </p>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="submit" class="btn btn-success" value="Submit">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{crypto.crypto_id}}">Delete</button>
+
+                            <!-- DELETE MODAL -->
+                                <div class="modal fade" id="delete_modal{{crypto.crypto_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_modalLabel">Delete Crypto</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete {{ crypto.crypto_symbol }}? This can't be undone.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{url_for('crypto_delete', crypto_id=crypto.crypto_id)}}" method="POST">
+                                                    <input type="submit" class="btn btn-primary" value="Delete">
+                                                </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                          </tr>
+                            {% endfor %}
+                        </table>
+
+                            </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}

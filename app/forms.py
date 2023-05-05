@@ -10,14 +10,14 @@ class LoginForm(FlaskForm):
 
 	submit = SubmitField('Sign In')
 
-class AssetClassForm(FlaskForm):
-	asset_class_name = StringField('Asset Class Name', validators=[DataRequired()])
-	allocation_percent = StringField('Allocation Percent', validators=[DataRequired()])
+class CryptoClassForm(FlaskForm):
+	crypto_class_name = StringField('Crypto Class Name', validators=[DataRequired()])
+	crypto_percent = StringField('Crypto Percent', validators=[DataRequired()])
 	submit = SubmitField('Update')
 
-############ TICKERS ############
-class TickerForm(FlaskForm):
-	ticker_symbol = StringField('Ticker Symbol', validators=[DataRequired()])
+############ CRYPTOS ############
+class CryptoForm(FlaskForm):
+	crypto_symbol = StringField('Crypto Symbol', validators=[DataRequired()])
 	company_name = StringField('Company Name', validators=[DataRequired()])
-	asset_class = SelectField('Asset Class', choices=[])
+	crypto_class = SelectField('Crypto Class', choices=[])
 	submit = SubmitField()

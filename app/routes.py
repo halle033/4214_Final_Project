@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, flash, session, request
 from app import app, db
-from app.update_ticker_price import post_ticker_prices
-from app.forms import LoginForm, AssetClassForm, TickerForm
-from app.models import User, Asset_Class, Ticker
+from app.update_cryptocurrency import post_crypto_prices
+from app.forms import LoginForm, CryptoClassForm, CryptoForm
+from app.models import User, Crypto_Class, Crypto
 from flask_login import login_user, logout_user, current_user, login_required, LoginManager
 from app.functions import *
 from app.formatting import *
@@ -16,36 +16,36 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-@app.route('/asset_class', methods=['GET', 'POST'])
+@app.route('/crypto_class', methods=['GET', 'POST'])
 @login_required
-def asset_class():
-    form = AssetClassForm()
+def crypto_class():
+    form = CryptoClassForm()
     user_id = session['user_id']
     if request.method == 'POST':
-        asset_class_name = request.form.get("asset_class_name")
+        crypto_class_name = request.form.get("crypto_class_name")
         allocation_percent = request.form.get("allocation_percent")
-        insert_asset_class(asset_class_name, allocation_percent)
-        return redirect(url_for('asset_class'))
-    asset_classes = get_asset_class()
-    return render_template('asset_class.html', form=form, asset_classes=asset_classes)
+        insert_crypto_class(crypto_class_name, allocation_percent)
+        return redirect(url_for('crypto_class'))
+    crypto_classes = get_crypto_class()
+    return render_template('crypto_class.html', form=form, crypto_classes=crypto_classes)
 
-@app.route('/asset_class_update/<asset_class_id>/',  methods=['GET', 'POST'])
+@app.route('/crypto_class_update/<crypto_class_id>/',  methods=['GET', 'POST'])
 @login_required
-def asset_class_update(asset_class_id):
-    form = AssetClassForm()
+def crypto_class_update(crypto_class_id):
+    form = CryptoClassForm()
     if request.method == 'POST':
-        asset_class_name = form.asset_class_name.data
+        crypto_class_name = form.crypto_class_name.data
         allocation_percent = form.allocation_percent.data
-        update_asset_class(asset_class_name, allocation_percent, asset_class_id)
-        return redirect(url_for('asset_class'))
-    return render_template('asset_class.html', form=form)
+        update_crypto_class(crypto_class_name, allocation_percent, crypto_class_id)
+        return redirect(url_for('crypto_class'))
+    return render_template('crypto_class.html', form=form)
 
-@app.route('/asset_class_delete/<asset_class_id>/', methods=['GET', 'POST'])
+@app.route('/crypto_class_delete/<crypto_class_id>/', methods=['GET', 'POST'])
 @login_required
-def asset_class_delete(asset_class_id):
-    delete_asset_class(asset_class_id)
-    flash(f"The asset class has been deleted.")
-    return redirect(url_for('asset_class'))
+def crypto_class_delete(crypto_class_id):
+    delete_crypto_class(crypto_class_id)
+    flash(f"The crypto class has been deleted.")
+    return redirect(url_for('crypto_class'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -94,51 +94,51 @@ def unauthorized():
     # do stuff
     return redirect(url_for('login'))
 
-@app.route('/ticker_delete/‹ticker_id>/', methods=['GET', 'POST'])
+@app.route('/crypto_delete/‹crypto_id>/', methods=['GET', 'POST'])
 @login_required
-def ticker_delete(ticker_id):
-    ticker = Ticker.query.get(ticker_id)
-    db.session.delete(ticker)
+def crypto_delete(crypto_id):
+    crypto = Crypto.query.get(cryptor_id)
+    db.session.delete(crypto)
     db.session.commit()
-    flash(f"{ticker.ticker_symbol} has been deleted.")
-    return redirect(url_for('tickers'))
+    flash(f"{crypto.crypto_symbol} has been deleted.")
+    return redirect(url_for('cryptos'))
 
-@app.route ('/ticker_update/<ticker_id>/', methods=['GET', 'POST'])
+@app.route ('/crypto_update/<crypto_id>/', methods=['GET', 'POST'])
 @login_required
-def ticker_update (ticker_id):
-    ticker = Ticker.query.get(ticker_id)
-    ticker.ticker_symbol = request.form.get("ticker_symbol")
-    ticker.company_name = request.form.get("company_name")
-    ticker.asset_class_id = request.form.get("asset_class")
+def crypto_update (crypto_id):
+    crypto = Crypto.query.get(crypto_id)
+    crypto.crypto_symbol = request.form.get("crypto_symbol")
+    crypto.company_name = request.form.get("company_name")
+    crypto.crypto_class_id = request.form.get("crypto_class")
     db.session.commit()
-    flash(f" {ticker.ticker_symbol} has been updated.")
-    return redirect(url_for('tickers'))
+    flash(f" {crypto.crypto_symbol} has been updated.")
+    return redirect(url_for('cryptos'))
 
-@app.route('/tickers', methods= ['GET', 'POST'])
+@app.route('/cryptos', methods= ['GET', 'POST'])
 @login_required
-def tickers():
-    form = TickerForm()
-    #form.asset_class.choices = [(asset_class.asset_class_id, asset_class.asset_class_name) for asset_class in AssetClass. query.all)]
+def cryptos():
+    form = CryptoForm()
+    #form.crypto_class.choices = [(crypto_class.crypto_class_id, crypto_class.crypto_class_name) for crypto_class in CryptoClass. query.all)]
     user_id = session['user_id']
-    asset_classes = get_asset_class()
-    form.asset_class.choices = [(asset_class['asset_class_id'], asset_class ['asset_class_name']) for asset_class in asset_classes]
+    crypto_classes = get_crypto_class()
+    form.crypto_class.choices = [(crypto_class['crypto_class_id'], crypto_class ['crypto_class_name']) for crypto_class in crypto_classes]
     if request.method == 'POST':
-        ticker_symbol = request.form.get("ticker_symbol")
+        crypto_symbol = request.form.get("crypto_symbol")
         company_name = request.form.get("company_name")
-        asset_class = request.form.get("asset_class")
-        ticker = Ticker(ticker_symbol=ticker_symbol, company_name=company_name, current_price=0, asset_class_id=asset_class, user_id=user_id)
-        db.session.add(ticker)
+        crypto_class = request.form.get("crypto_class")
+        crypto = Crypto(crypto_symbol=crypto_symbol, company_name=company_name, current_price=0, crypto_class_id=crypto_class, user_id=user_id)
+        db.session.add(crypto)
         db.session.commit()
-        flash(f" {ticker.ticker_symbol} has been added.")
-        return redirect(url_for('tickers'))
+        flash(f" {crypto.crypto_symbol} has been added.")
+        return redirect(url_for('cryptos'))
 # This is a join.. the item in the join section is the left table
 # Check out the complex order by
-#tickers = db.session. query(Ticker, AssetClass).join(Ticker).order_by(AssetClass.asset_class_name, Ticker.ticker_symbol)
-    tickers = get_tickers(user_id)
-    return render_template ('tickers.html', form=form, tickers=tickers, asset_classes=asset_classes)
+#cryptos = db.session. query(Crypto, CryptoClass).join(Crypto).order_by(CryptoClass.crypto_class_name, Crypto.Crypto_symbol)
+    cryptos = get_cryptos(user_id)
+    return render_template ('crypto.html', form=form, cryptos=cryptos, crypto_classes=crypto_classes)
 
-@app.route('/ticker_price_update')
+@app.route('/crypto_price_update')
 @login_required
-def ticker_price_update():
-    post_ticker_prices()
-    return redirect(url_for('tickers'))
+def crypto_price_update():
+    post_crypto_prices()
+    return redirect(url_for('cryptos'))

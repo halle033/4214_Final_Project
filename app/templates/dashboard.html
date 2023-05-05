@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block head %}
+    <title>Dashboard - Group 1</title>
+{% endblock %}
+
+
+{% block body %}
+    <!-- Header-->
+          <!-- Header-->
+        <header class="py-4">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">Dashboard</h1>
+                        <p class="fs-4">This is the dashboard page. You are now logged in. </p>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+{% endblock %}

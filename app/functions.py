@@ -1,44 +1,44 @@
 from app.db_connect import connect
 from app import db, app
 
-def get_asset_class():
+def get_crypto_class():
     conn = connect()
     with conn.cursor() as cur:
-        sql = f'SELECT asset_class_id, asset_class_name, allocation_percent from asset_class'
+        sql = f'SELECT crypto_class_id, crypto_class_name, crypto_percent from crypto_class'
         cur.execute(sql)
         return cur.fetchall()
 
-def delete_asset_class(asset_class_id):
+def delete_crypto_class(crypto_class_id):
     conn = connect()
     with conn.cursor() as cur:
-        sql = f'DELETE from asset_class WHERE asset_class_id = {asset_class_id}'
+        sql = f'DELETE from crypto_class WHERE crypto_class_id = {crypto_class_id}'
         cur.execute(sql)
         conn.commit()
 
-def get_tickers(user_id):
+def get_cryptos(user_id_):
     conn = connect ()
     with conn.cursor() as cur:
         sql = f'SELECT ' \
-              f't.ticker_id, t.company_name, ac.asset_class_id, ' \
-              f'ac.asset_class_name, t.current_price, t.ticker_symbol ' \
-              f'FROM ticker t JOIN asset_class ac ON t.asset_class_id = ac.asset_class_id ' \
-              f'WHERE t.user_id = {user_id}'
+              f't.crypto_class_id, t.comp_name, ac.crypto_class_id, ' \
+              f'ac.crypto_class_name, t.crypto_price, t.crypto_symbol ' \
+              f'FROM crypto t JOIN crypto_class ac ON t.crypto_class_id = ac.crypto_class_id ' \
+              f'WHERE t.user_id_ = {user_id_}'
         cur.execute (sql)
         return cur.fetchall()
 
-def insert_asset_class(asset_class_name, allocation_percent):
+def insert_crypto_class(crypto_class_name, crypto_percent):
     conn = connect()
     with conn.cursor() as cur:
-        sql = f'INSERT INTO asset_class (asset_class_name, allocation_percent) ' \
-              f'VALUES ("{asset_class_name}", {allocation_percent})'
+        sql = f'INSERT INTO crypto_class (crypto_class_name, crypto_percent) ' \
+              f'VALUES ("{crypto_class_name}", {crypto_percent})'
         cur.execute(sql)
         conn.commit()
 
-def  update_asset_class(asset_class_name, allocation_percent, asset_class_id):
+def  update_crypto_class(crypto_class_name, crypto_percent, crypto_class_id):
     conn = connect()
     with conn.cursor() as cur:
-        sql = f'UPDATE asset_class ' \
-              f'SET asset_class_name = "{asset_class_name}", allocation_percent = {allocation_percent} ' \
-              f'WHERE asset_class_id = {asset_class_id} '
+        sql = f'UPDATE crypto_class ' \
+              f'SET crypto_class_name = "{crypto_class_name}", crypto_percent = {crypto_percent} ' \
+              f'WHERE crypto_class_id = {crypto_class_id} '
         cur.execute(sql)
         conn.commit()

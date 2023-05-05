@@ -1,10 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block head %}
+    <title>Login Page - Group 1</title>
+{% endblock %}
+
+
+{% block body %}
+  <!-- Header-->
+        <header class="py-4">
+            <div class="container px-lg-5">
+                <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+                    <div class="m-4 m-lg-5">
+                        <h1 class="display-5 fw-bold">Login Page</h1>
+
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+
+                                {% for message in messages %}
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form action="" method="POST" novalidate>
+                            {{ form.hidden_tag() }}
+                        <p>
+                            {{ form.username.label }}: admin<br>
+                            {{ form.username(size=32) }}
+                            {% for error in form.username.errors %}
+                            <span style="color: red;">[{{ error }}] </span>
+                            {% endfor %}
+                        </p>
+                        <p>
+                            {{ form.password.label }}: pass<br>
+                            {{ form.password(size=32) }}
+                            {% for error in form.password.errors %}
+                            <span style="color: red;">[{{ error }}] </span>
+                            {% endfor %}
+                        </p>
+                        <p> {{ form.submit() }} </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+{% endblock %}
