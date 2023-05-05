@@ -7,7 +7,7 @@ def load_user(id):
     return User.query.get(int(id))
 
 ##### USER MODEL #####
-# The user_id needs to be named id for the UserMixin to work correctly
+# The user_id_ needs to be named id for the UserMixin to work correctly
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -27,4 +27,4 @@ class Crypto(db.Model):
     comp_name = db.Column(db.String(164), index=True)
     crypto_price = db.Column(db.Float)
     user_id_ = db.Column(db.Integer)
-    crypto_id_ = db.Column(db.Integer)
+    crypto_id = db.Column(db.Integer)

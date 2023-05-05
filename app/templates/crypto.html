@@ -39,7 +39,7 @@
 
                         <br>
 
-                        <h1>Cryptos
+                        <h1>Crypto
                             <button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_crypto">Add Crypto</button>
                             <a role="button" class="btn btn-warning" aria-disabled="true" href="{{ url_for('crypto_price_update') }}">Update Crypto Price</a>
                         </h1>
@@ -62,9 +62,9 @@
                                                         {% endfor %}
                                                     </p>
                                                     <p>
-                                                        {{ form.company_name.label }}<br>
-                                                        {{ form.company_name(size=52) }}
-                                                        {% for error in form.company_name.errors %}
+                                                        {{ form.comp_name.label }}<br>
+                                                        {{ form.comp_name(size=52) }}
+                                                        {% for error in form.comp_name.errors %}
                                                         <span style="color: red;">[{{ error }}] </span>
                                                         {% endfor %}
                                                     </p>
@@ -92,11 +92,11 @@
                             <th scope="col">Current Price</th>
                             <th scope="col">Crypto Class</th>
                           </thead>
-                            {% for crypto in cryptos %}
+                            {% for crypto in crypto %}
                           <tr>
                             <td align="left">{{ crypto.crypto_symbol }}</td>
-                            <td align="left">{{ crypto.company_name }}</td>
-                              <td align="left">{{ crypto.current_price | currencyFormat }}</td>
+                            <td align="left">{{ crypto.comp_name }}</td>
+                              <td align="left">{{ crypto.crypto_price | currencyFormat }}</td>
                               <td align="left">{{ crypto.crypto_class_name }}</td>
                             <td>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update_modal{{crypto.crypto}}">Update Info</button>
@@ -104,7 +104,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="update_modalLabel">Update Cryptos</h5>
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Crypto</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                <form action="{{url_for('crypto_update', crypto_id=crypto.crypto_id)}}" method="POST" novalidate>
@@ -116,8 +116,8 @@
 
                                                     </p>
                                                     <p>
-                                                        <label for="company_name">Company Name:</label><br>
-                                                        <input type="text" id="company_name" name="company_name" size=50 value="{{ crypto.company_name  }}">
+                                                        <label for="comp_name">Company Name:</label><br>
+                                                        <input type="text" id="comp_name" name="comp_name" size=50 value="{{ crypto.comp_name  }}">
 
                                                     </p>
                                                     <p>

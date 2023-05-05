@@ -15,11 +15,11 @@ def delete_crypto_class(crypto_class_id):
         cur.execute(sql)
         conn.commit()
 
-def get_cryptos(user_id_):
+def get_crypto(user_id_):
     conn = connect ()
     with conn.cursor() as cur:
         sql = f'SELECT ' \
-              f't.crypto_class_id, t.comp_name, ac.crypto_class_id, ' \
+              f't.crypto_id, t.comp_name, ac.crypto_class_id, ' \
               f'ac.crypto_class_name, t.crypto_price, t.crypto_symbol ' \
               f'FROM crypto t JOIN crypto_class ac ON t.crypto_class_id = ac.crypto_class_id ' \
               f'WHERE t.user_id_ = {user_id_}'

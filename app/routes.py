@@ -13,14 +13,14 @@ login_manager.init_app(app)
 
 # This method is used to as part of the flask_login code.
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+def load_user(user_id_):
+    return User.query.get(int(user_id_))
 
 @app.route('/crypto_class', methods=['GET', 'POST'])
 @login_required
 def crypto_class():
     form = CryptoClassForm()
-    user_id = session['user_id']
+    user_id_ = session['user_id_']
     if request.method == 'POST':
         crypto_class_name = request.form.get("crypto_class_name")
         crypto_percent = request.form.get("crypto_percent")
@@ -68,8 +68,8 @@ def login():
                return redirect(url_for('login'))
           login_user(user)
           session.permanent = True
-          session['user_id'] = user.id
-          print(session['user_id'])
+          session['user_id_'] = user.id
+          print(session['user_id_'])
           return redirect(url_for('dashboard'))
      return render_template('login.html', title='Sign In', form=form)
 @app.route('/')
@@ -101,44 +101,44 @@ def crypto_delete(crypto_id):
     db.session.delete(crypto)
     db.session.commit()
     flash(f"{crypto.crypto_symbol} has been deleted.")
-    return redirect(url_for('cryptos'))
+    return redirect(url_for('crypto'))
 
 @app.route ('/crypto_update/<crypto_id>/', methods=['GET', 'POST'])
 @login_required
 def crypto_update (crypto_id):
     crypto = Crypto.query.get(crypto_id)
     crypto.crypto_symbol = request.form.get("crypto_symbol")
-    crypto.company_name = request.form.get("company_name")
+    crypto.comp_name = request.form.get("comp_name")
     crypto.crypto_class_id = request.form.get("crypto_class")
     db.session.commit()
     flash(f" {crypto.crypto_symbol} has been updated.")
-    return redirect(url_for('cryptos'))
+    return redirect(url_for('crypto'))
 
-@app.route('/cryptos', methods= ['GET', 'POST'])
+@app.route('/crypto', methods= ['GET', 'POST'])
 @login_required
-def cryptos():
+def crypto():
     form = CryptoForm()
     #form.crypto_class.choices = [(crypto_class.crypto_class_id, crypto_class.crypto_class_name) for crypto_class in CryptoClass. query.all)]
-    user_id = session['user_id']
+    user_id_ = session['user_id_']
     crypto_classes = get_crypto_class()
     form.crypto_class.choices = [(crypto_class['crypto_class_id'], crypto_class ['crypto_class_name']) for crypto_class in crypto_classes]
     if request.method == 'POST':
         crypto_symbol = request.form.get("crypto_symbol")
-        company_name = request.form.get("company_name")
+        comp_name = request.form.get("comp_name")
         crypto_class = request.form.get("crypto_class")
-        crypto = Crypto(crypto_symbol=crypto_symbol, company_name=company_name, current_price=0, crypto_class_id=crypto_class, user_id=user_id)
+        crypto = Crypto(crypto_symbol=crypto_symbol, comp_name=comp_name, crypto_price=0, crypto_class_id=crypto_class, user_id_=user_id_)
         db.session.add(crypto)
         db.session.commit()
         flash(f" {crypto.crypto_symbol} has been added.")
-        return redirect(url_for('cryptos'))
+        return redirect(url_for('crypto'))
 # This is a join.. the item in the join section is the left table
 # Check out the complex order by
-#cryptos = db.session. query(Crypto, CryptoClass).join(Crypto).order_by(CryptoClass.crypto_class_name, Crypto.Crypto_symbol)
-    cryptos = get_cryptos(user_id)
-    return render_template ('crypto.html', form=form, cryptos=cryptos, crypto_classes=crypto_classes)
+#crypto = db.session. query(Crypto, CryptoClass).join(Crypto).order_by(CryptoClass.crypto_class_name, Crypto.Crypto_symbol)
+    crypto = get_crypto(user_id_)
+    return render_template ('crypto.html', form=form, crypto=crypto, crypto_classes=crypto_classes)
 
 @app.route('/crypto_price_update')
 @login_required
 def crypto_price_update():
     post_crypto_prices()
-    return redirect(url_for('cryptos'))
+    return redirect(url_for('crypto'))
