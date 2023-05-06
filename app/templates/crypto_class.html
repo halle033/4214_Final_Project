@@ -61,9 +61,9 @@
                                                         {% endfor %}
                                                     </p>
                                                     <p>
-                                                        {{ form.allocation_percent.label }}<br>
-                                                        {{ form.allocation_percent(size=52) }}
-                                                        {% for error in form.allocation_percent.errors %}
+                                                        {{ form.crypto_percent.label }}<br>
+                                                        {{ form.crypto_percent(size=52) }}
+                                                        {% for error in form.crypto_percent.errors %}
                                                         <span style="color: red;">[{{ error }}] </span>
                                                         {% endfor %}
                                                     </p>
@@ -80,12 +80,12 @@
                             <table  class="table">
                           <thead>
                             <th scope="col">Crypto Class Name</th>
-                            <th scope="col">Allocation Percent</th>
+                            <th scope="col">Crypto Percent</th>
                           </thead>
                             {% for crypto_class in crypto_classes %}
                           <tr>
                             <td align="left">{{ crypto_class.crypto_class_name }}</td>
-                            <td align="left">{{ crypto_class.allocation_percent | percentageFormat }}</td>
+                            <td align="left">{{ crypto_class.crypto_percent | percentageFormat }}</td>
                             <td>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update_modal{{crypto_class.crypto_class_id}}">Update Info</button>
                                 <div class="modal fade" id="update_modal{{crypto_class.crypto_class_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
@@ -107,10 +107,10 @@
                                                         {% endfor %}
                                                     </p>
                                                     <p>
-                                                        {{ form.allocation_percent.label }}<br>
-                                                        {{ form.allocation_percent(size=32, value=crypto_class.allocation_percent) }}
+                                                        {{ form.crypto_percent.label }}<br>
+                                                        {{ form.crypto_percent(size=32, value=crypto_class.crypto_percent) }}
 
-                                                        {% for error in form.allocation_percent.errors %}
+                                                        {% for error in form.crypto_percent.errors %}
                                                         <span style="color: red;">[{{ error }}] </span>
                                                         {% endfor %}
                                                     </p>

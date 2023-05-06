@@ -14,13 +14,17 @@ login_manager.init_app(app)
 # This method is used to as part of the flask_login code.
 @login_manager.user_loader
 def load_user(user_id_):
-    return User.query.get(int(user_id_))
+    print("hi1")
+    user = User.query.get(int(user_id_))
+    print("hi2")
+    return user
 
 @app.route('/crypto_class', methods=['GET', 'POST'])
 @login_required
 def crypto_class():
     form = CryptoClassForm()
-    user_id_ = session['user_id_']
+    print(session)
+    user_id_ = session['_user_id']
     if request.method == 'POST':
         crypto_class_name = request.form.get("crypto_class_name")
         crypto_percent = request.form.get("crypto_percent")
@@ -68,8 +72,7 @@ def login():
                return redirect(url_for('login'))
           login_user(user)
           session.permanent = True
-          session['user_id_'] = user.id
-          print(session['user_id_'])
+          session['_user_id'] = user.id
           return redirect(url_for('dashboard'))
      return render_template('login.html', title='Sign In', form=form)
 @app.route('/')
@@ -97,7 +100,7 @@ def unauthorized():
 @app.route('/crypto_delete/‹crypto_id>/', methods=['GET', 'POST'])
 @login_required
 def crypto_delete(crypto_id):
-    crypto = Crypto.query.get(cryptor_id)
+    crypto = Crypto.query.get(crypto_id)
     db.session.delete(crypto)
     db.session.commit()
     flash(f"{crypto.crypto_symbol} has been deleted.")
@@ -118,8 +121,9 @@ def crypto_update (crypto_id):
 @login_required
 def crypto():
     form = CryptoForm()
+    print("session")
     #form.crypto_class.choices = [(crypto_class.crypto_class_id, crypto_class.crypto_class_name) for crypto_class in CryptoClass. query.all)]
-    user_id_ = session['user_id_']
+    user_id_ = session['_user_id']
     crypto_classes = get_crypto_class()
     form.crypto_class.choices = [(crypto_class['crypto_class_id'], crypto_class ['crypto_class_name']) for crypto_class in crypto_classes]
     if request.method == 'POST':

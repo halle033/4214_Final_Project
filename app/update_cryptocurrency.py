@@ -10,8 +10,9 @@ def get_crypto():
         return cur.fetchall()
 
 def get_stock_price(symbol):
-   crypto_yahoo = yf.Crypto(symbol)
+   crypto_yahoo = yf.Ticker(symbol.replace('$', ''))
    data = crypto_yahoo.history()
+   print(data.tail(1)['Close'])
    last_quote = (data.tail(1)['Close'].iloc[0])
    return last_quote
 
